@@ -2,7 +2,7 @@ import {
   APP_INITIALIZER,
   NgModule,
   NgZone,
-  InjectionToken
+  InjectionToken,
 } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -17,7 +17,7 @@ import {
   PopoverModule,
   TabsModule,
   TooltipModule,
-  TypeaheadModule
+  TypeaheadModule,
 } from 'ngx-bootstrap';
 import { TagInputModule } from 'ngx-chips';
 import { Restangular, RestangularModule } from 'ngx-restangular';
@@ -32,6 +32,7 @@ import { SyndesisCommonModule } from './common/common.module';
 import { UserService } from './common/user.service';
 import { ConfigService } from './config.service';
 import { StoreModule } from './store/store.module';
+import { SupportingModule } from './support/support.module';
 
 export function appInitializer(configService: ConfigService) {
   return () => {
@@ -41,7 +42,7 @@ export function appInitializer(configService: ConfigService) {
 
 export function restangularProviderConfigurer(
   restangularProvider: any,
-  config: ConfigService
+  config: ConfigService,
 ) {
   restangularProvider.setPlainByDefault(true);
   restangularProvider.setBaseUrl(config.getSettings().apiEndpoint);
@@ -64,16 +65,16 @@ export function restangularProviderConfigurer(
 }
 
 export const RESTANGULAR_MAPPER = new InjectionToken<Restangular>(
-  'restangularMapper'
+  'restangularMapper',
 );
 export function mapperRestangularProvider(
   restangular: Restangular,
-  config: ConfigService
+  config: ConfigService,
 ) {
   return restangular.withConfig(restangularConfigurer => {
     const mapperEndpoint = config.getSettings().mapperEndpoint;
     restangularConfigurer.setBaseUrl(
-      mapperEndpoint ? mapperEndpoint : '/mapper/v1'
+      mapperEndpoint ? mapperEndpoint : '/mapper/v1',
     );
   });
 }
@@ -114,28 +115,29 @@ export function mapperRestangularProvider(
     TypeaheadModule.forRoot(),
     TagInputModule,
     AppRoutingModule,
+    SupportingModule,
     StoreModule,
     SyndesisCommonModule.forRoot(),
     DataMapperModule,
     NotificationModule,
-    TourNgxBootstrapModule.forRoot()
+    TourNgxBootstrapModule.forRoot(),
   ],
   providers: [
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
       deps: [ConfigService],
-      multi: true
+      multi: true,
     },
     {
       provide: RESTANGULAR_MAPPER,
       useFactory: mapperRestangularProvider,
-      deps: [Restangular, ConfigService]
+      deps: [Restangular, ConfigService],
     },
     ConfigService,
     UserService,
-    CanDeactivateGuard
+    CanDeactivateGuard,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,14 @@
+<syndesis-modal id="supportPage"
+                [body]="supportPageModal">
+  <ng-template #supportPageModal let-modal="modal">
+      Please select the information you want to download:
+      <input type="file"
+             id="file-import"
+             (change)="importDB($event, modal)">
+      <button type="button"
+              class="btn btn-default"
+              (click)="testPaolo()">
+              Download
+     </button>
+  </ng-template>
+</syndesis-modal>
